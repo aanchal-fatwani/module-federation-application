@@ -6,6 +6,9 @@ module.exports = {
   mode: "development",
   devServer: {
     port: 3001,
+    historyApiFallback: {
+      index: "/",
+    },
   },
   entry: "./src/index.js",
   output: {
