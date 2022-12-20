@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
 const selectedButtonStyle = {
   borderBottom: "4px solid dodgerblue",
@@ -20,19 +15,26 @@ const basicButtonStyle = {
   alignItems: "center",
 };
 
-const App = () => {
+const App = ({ navigate, location }) => {
   const [val, setVal] = useState(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+  let customNavigate = navigate;
+  if (!navigate) {
+    customNavigate = useNavigate();
+  }
+
+  let customLocation = location;
+  if (!location) {
+    customLocation = useLocation();
+  }
 
   const syncTabToReflectRoute = () => {
-    if (location.pathname === "/auth/login") setVal(0);
-    else if (location.pathname === "/auth/register") setVal(1);
+    if (customLocation.pathname === "/auth/login") setVal(0);
+    else if (customLocation.pathname === "/auth/register") setVal(1);
   };
 
   useEffect(() => {
     syncTabToReflectRoute();
-  }, [location]);
+  }, [customLocation]);
 
   return (
     <div
@@ -63,7 +65,7 @@ const App = () => {
           }}
         >
           <button
-            onClick={() => navigate(`/auth/login`)}
+            onClick={() => customNavigate(`/auth/login`)}
             style={
               val === 0
                 ? { ...basicButtonStyle, ...selectedButtonStyle }
@@ -73,7 +75,7 @@ const App = () => {
             Login
           </button>
           <button
-            onClick={() => navigate(`/auth/register`)}
+            onClick={() => customNavigate(`/auth/register`)}
             style={
               val === 1
                 ? { ...basicButtonStyle, ...selectedButtonStyle }
